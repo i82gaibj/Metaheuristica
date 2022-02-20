@@ -9,8 +9,6 @@ def evaluarSolucion(datos, solucion):
         longitud += datos[solucion[i - 1]][solucion[i]]
     return longitud
 
-
-
 def obtenerMejorVecino(solucion, datos):
     ##Obtención de los vecinos
     vecinos = []
@@ -33,9 +31,9 @@ def obtenerMejorVecino(solucion, datos):
     return mejorVecino, mejorLongitud
 
 
-def hillClimbingMejorada(datos):
+def hillClimbingImproved(datos):
     l = len(datos)
-    Minlongitud = float('inf')
+    longitud_min = float('inf')
     ciudades = list(range(l))
     solucion = []
     for i in range(l):
@@ -46,47 +44,48 @@ def hillClimbingMejorada(datos):
     longitud = evaluarSolucion(datos, solucion)
 
     vecino = obtenerMejorVecino(solucion, datos)
-    contador = 1
+    cont = 1
     while vecino[1] < longitud:
         solucion = vecino[0]
         longitud = vecino[1]
         vecino = obtenerMejorVecino(solucion, datos)
-        contador = contador + 1
+        cont = cont + 1
     # So far the Hill Climbing algorithm remains
 
     # Now the improvement begins
-    while contador + 2 < (len(datos) - 1):
+    while cont + 2 < (len(datos) - 1):
         # We obtain a permutation of the solution
-        aux = contador
-        aux1 = 0
-        Newsolucion = []
+        aux_cont = cont
+        aux_cont_2 = 0
+        nueva_solucion = []
 
         for y in range(l):
-            if aux < (len(datos) - 1):
-                Newsolucion.append(solucion[aux])
-                aux = aux + 1
+            if aux_cont < (len(datos) - 1):
+                nueva_solucion.append(solucion[aux_cont])
+                aux_cont += 1
             else:
-                Newsolucion.append(solucion[aux1])
-                aux1 = aux1 + 1
+                nueva_solucion.append(solucion[aux_cont_2])
+                aux_cont_2 += 1
 
-        Auxlongitud = evaluarSolucion(datos, Newsolucion)
+        aux_longitud = evaluarSolucion(datos, nueva_solucion)
 
         # We compare if the new solution is better than the one we already had
-        if Auxlongitud < Minlongitud:
-            Auxvecino = obtenerMejorVecino(Newsolucion, datos)
-            contador = contador + 2
-            while Auxvecino[1] < Auxlongitud:
-                Newsolucion = Auxvecino[0]
-                Auxlongitud = Auxvecino[1]
-                Auxvecino = obtenerMejorVecino(Newsolucion, datos)
-                contador = contador + 1
-            Minlongitud = Auxlongitud
+        if aux_longitud < longitud_min:
+            cont = cont + 2
+            aux_vecino = obtenerMejorVecino(nueva_solucion, datos)
 
-        contador = contador + 1
+            while aux_vecino[1] < aux_longitud:
+                nueva_solucion = aux_vecino[0]
+                aux_longitud = aux_vecino[1]
+                aux_vecino = obtenerMejorVecino(nueva_solucion, datos)
+                cont += 1
+            longitud_min = aux_longitud
+
+        cont += 1
 
     # Returns best solution found
-    if Minlongitud < longitud:
-        return Newsolucion, Auxlongitud
+    if longitud_min < longitud:
+        return nueva_solucion, aux_longitud
     else:
         return solucion, longitud
 
@@ -116,53 +115,53 @@ def hillClimbing(datos):
 
 
 def main():
-    
+
     datos = []
     iterations = 1000
     results = []
-    for i in range(5, 15):
+
+    for i in range(5, 50, 5):
         datos = generador(i)
         with open("Datos.txt", "a") as file:
-            titulor = "ciudad, longitud\n"
+            titulor = "longitud = " + str(i) + "\n"
             file.write(titulor)
+            cont = len(datos)
             for key in datos:
+                cont -= 1
                 ciudad = key
-                filas = str(ciudad) + "," + "\n"
+                if (cont != 0):
+                    filas = str(ciudad) + "," + "\n" + "\n"
+                else:
+                    filas = str(ciudad) + "\n" + "\n"
                 file.write(filas)
-        distances = []
-        bestDist = math.inf
-        worstDist = 0
-        sumDist = 0
-        Auxdistances = []
-        AuxbestDist = math.inf
-        AuxworstDist = 0
-        AuxsumDist = 0
-    		
-        
+        distances = aux_distances = []
+        best_dist, aux_best_dist = math.inf, math.inf
+        worst_dist , aux_worst_dist ,aux_sum_dist, sum_dist = 0,0,0,0
+
         for j in range(iterations):
             #Calls the HillClimbing algorithm
             s = hillClimbing(datos)
             distances.append(s[1])
-            sumDist += s[1]
-            if (s[1] < bestDist):
-                bestDist = s[1]
-            elif (s[1] > worstDist):
-                worstDist = s[1]
+            sum_dist += s[1]
+            if (s[1] < best_dist):
+                best_dist = s[1]
+            elif (s[1] > worst_dist):
+                worst_dist = s[1]
             print("hola1")
             #Calls the improved version using the same data
-            e = hillClimbingMejorada(datos)
-            Auxdistances.append(e[1])
-            AuxsumDist += e[1]
-            if (e[1] < AuxbestDist):
-                AuxbestDist = e[1]
-            elif (e[1] > AuxworstDist):
-                AuxworstDist = e[1]
+            e = hillClimbingImproved(datos)
+            aux_distances.append(e[1])
+            aux_sum_dist += e[1]
+            if (e[1] < aux_best_dist):
+                aux_best_dist = e[1]
+            elif (e[1] > aux_worst_dist):
+                aux_worst_dist = e[1]
 
             print("hola2")
-        optimalOccurrences = distances.count(bestDist)
-        AuxoptimalOccurrences = Auxdistances.count(AuxbestDist)
-        results.append([i, bestDist, worstDist, sumDist / iterations, optimalOccurrences, optimalOccurrences / iterations, AuxbestDist, AuxworstDist, AuxsumDist / iterations, AuxoptimalOccurrences, AuxoptimalOccurrences / iterations])
-	
+        optimal_occurrences = distances.count(best_dist)
+        aux_optimal_occurrences = aux_distances.count(aux_best_dist)
+        results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, optimal_occurrences / iterations, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences, aux_optimal_occurrences / iterations])
+
     #Export data to .csv file
     with open("HillClimbingResults.csv", "w") as file:
         file.write(",".join(["N", "Best distance", "Worst Distance", "Average Distance", "Optimal occurrences", "Optimal average", "Best UP distance", "Worst UP distance", "Average UP Distance", "Optimal UP ocurrences", "Optimal UP average\n"]))
