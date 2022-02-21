@@ -115,7 +115,8 @@ def hillClimbing(datos):
 
 
 def main():
-
+    with open("Datos.txt", "w") as f:
+        pass
     datos = []
     iterations = 1000
     results = []
@@ -123,21 +124,18 @@ def main():
     for i in range(5, 10):
         datos = generador(i)
         with open("Datos.txt", "a") as file:
-            titulor = "\n" + "longitud = " + str(i)
+            titulor =  "longitud = " + str(i) + "\n"
             file.write(titulor)
-            cont = len(datos)
             for key in datos:
-                cont -= 1
                 ciudad = key
-                if (cont != 0):
-                    filas = "\n" + str(ciudad) + ","
-                else:
-                    filas = "\n" + str(ciudad)
+                filas =  str(ciudad) + "," + "\n"
+
                 file.write(filas)
 
         distances, aux_distances = [], []
         best_dist, aux_best_dist = math.inf, math.inf
-        worst_dist , aux_worst_dist ,aux_sum_dist, sum_dist = 0,0,0,0
+        worst_dist , aux_worst_dist ,aux_sum_dist, sum_dist  = 0,0,0,0
+
 
         for j in range(iterations):
             #Calls the HillClimbing algorithm
@@ -148,7 +146,6 @@ def main():
                 best_dist = s[1]
             elif (s[1] > worst_dist):
                 worst_dist = s[1]
-            print("hola1")
             #Calls the improved version using the same data
             e = hillClimbingImproved(datos)
             aux_distances.append(e[1])
@@ -157,8 +154,6 @@ def main():
                 aux_best_dist = e[1]
             elif (e[1] > aux_worst_dist):
                 aux_worst_dist = e[1]
-
-            print("hola2")
         optimal_occurrences = distances.count(best_dist)
         aux_optimal_occurrences = aux_distances.count(aux_best_dist)
         results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences])
@@ -168,6 +163,16 @@ def main():
         file.write(",".join(["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frec. mejor distancia", "Mejor distancia (mejorada)", "Peor distancia (mejorada)", "Distancia Media (mejorada)", "Frec. mejor distancia (mejorada)\n"]))
         for res in results:
             file.write(",".join([str(s) for s in res]) + "\n")
+
+
+
+#def main():
+
+ #   iterations = input('Cuantas perturbaciones desea?')
+  #  iterations = int(iterations)
+   #algoritmo(iterations)
+
+
 
 
 if __name__ == "__main__":

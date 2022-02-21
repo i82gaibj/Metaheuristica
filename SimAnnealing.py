@@ -27,7 +27,75 @@ def obtenerVecino(solucion, datos):
 
     return vecino, longitud
 
-def simAnnealing(datos,t0):
+def simAnnealing(datos,t0,maxUnImprovement):
+    t=t0
+    l=len(datos)
+    ##Creamos una solucion aleatoria
+    ciudades = list(range(l))
+    solucion = []
+    for i in range(l):
+        ciudad = ciudades[random.randint(0, len(ciudades) - 1)]
+        solucion.append(ciudad)
+        ciudades.remove(ciudad)
+    longitud = evaluarSolucion(datos, solucion)
+    #print("Longitud de la ruta: ", longitud)
+    #print("Temperatura: ", t)
+
+    it=0
+    unimprovement = 0
+
+    bestSol = solucion
+    bestLen = longitud
+    while t > 0.05 and it < 5000:
+        ##Obtenemos un vecino al azar
+        vecino = obtenerVecino(solucion, datos)
+        incremento = vecino[1]-longitud
+
+        if incremento < 0:
+            longitud = vecino[1]
+            solucion = vecino[0]
+            unimprovement = 0
+
+            if longitud < bestLen:
+                bestSol = solucion
+                bestLen = longitud
+
+        elif random.random() < math.exp(-abs(incremento) / t):
+            longitud = vecino[1]
+            solucion = vecino[0]
+            unimprovement = 0
+
+            if longitud < bestLen:
+                bestSol = solucion
+                bestLen = longitud
+        else:
+            unimprovement += 1
+
+        it+=1
+        t=0.99*t
+
+        #Different annealing functions (not compatible with reheating unless we reset it)
+        #t = logAnnealing(t0, alpha, it)
+        #t = geometricAnnealing(t0, alpha, it)
+        #t = linearAnnealing(t0, alpha, it)
+
+
+        #Reheating
+        #https://academicjournals.org/journal/IJPS/article-full-text-pdf/D6CF1F025890
+        if unimprovement >= maxUnImprovement:
+            unimprovement = 0
+            t = t0
+
+        # My own approach to reheating, didn't work well
+        #if t/t0 < 0.1 and random.random() < 0.01:
+        #    print("reheat " + str(t) + " " + str(2*t))
+        #    t *= 5
+
+        #print("Longitud de la ruta: ", longitud)
+        #print("Temperatura: ", t)
+    return bestSol, bestLen
+
+def simAnnealing2(datos,t0):
     t=t0
     l=len(datos)
     ##Creamos una solucion aleatoria
@@ -62,22 +130,53 @@ def simAnnealing(datos,t0):
 
 def main():
 
+    aux_dataset = []
+    dataset = []
     with open ("Datos.txt", "r") as f:
         for i in range(5, 10):
             joder = f.readline()
-            gay = "["
+            gay = []
             for j in range(0,i):
                 f_contents = f.readline()
-                gay = str(gay) + str(f_contents)
+                f_contents = f_contents[1:-3]
+                numbers = [int(n) for n in f_contents.split(", ")]
+                gay.append(numbers)
 
                 if(j == i-1):
-                    gay = str(gay) + "]"
-                print("vez ", j)
-                print (gay)
+                    dataset.append(gay)
 
+    print(dataset)
+    maxUnImprovement = 400
+    t0 = 5
 
+    iterations = 1000
+    results = []
+    for datos in dataset:
+        print("N: " + str(len(datos)))
+        distances = []
 
+        bestDist = math.inf
+        worstDist = 0
+        sumDist = 0
+        for j in range(iterations):
+            s = simAnnealing(datos, t0, maxUnImprovement)
+            distances.append(s[1])
+            sumDist += s[1]
+            if (s[1] < bestDist):
+                bestDist = s[1]
+            elif (s[1] > worstDist):
+                worstDist = s[1]
 
+        optimalOccurrences = distances.count(bestDist)
+        results.append([len(datos), bestDist, worstDist, sumDist / iterations, optimalOccurrences,
+                        optimalOccurrences / iterations])
+
+    # Export data to csv file
+    with open("results.csv", "w") as file:
+        file.write(",".join(
+            ["N", "Best distance", "W<orst Distance", "Average Distance", "Optimal occurrences", "Optimal average\n"]))
+        for res in results:
+            file.write(",".join([str(e) for e in res]) + "\n")
 
 
 if __name__ == "__main__":
