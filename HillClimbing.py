@@ -117,7 +117,7 @@ def hillClimbing(datos):
 def main():
 
     datos = []
-    iterations = 1000
+    iterations = 500
     results = []
 
     for i in range(5, 10):
@@ -167,7 +167,6 @@ def main():
         file.write(",".join(["N", "Best distance", "Worst Distance", "Average Distance", "Optimal occurrences", "Optimal average", "Best UP distance", "Worst UP distance", "Average UP Distance", "Optimal UP ocurrences", "Optimal UP average\n"]))
         for res in results:
             file.write(",".join([str(s) for s in res]) + "\n")
-            file.write(",".join([str(e) for e in res]) + "\n")
 
 
 if __name__ == "__main__":
