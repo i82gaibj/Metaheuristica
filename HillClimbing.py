@@ -120,7 +120,7 @@ def main():
     iterations = 1000
     results = []
 
-    for i in range(5, 50, 5):
+    for i in range(5, 55, 5):
         datos = generador(i)
         with open("Datos.txt", "a") as file:
             titulor = "longitud = " + str(i) + "\n"
