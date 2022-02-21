@@ -120,7 +120,7 @@ def main():
     iterations = 1000
     results = []
 
-    for i in range(5, 55, 5):
+    for i in range(5, 10):
         datos = generador(i)
         with open("Datos.txt", "a") as file:
             titulor = "longitud = " + str(i) + "\n"
@@ -166,6 +166,7 @@ def main():
     with open("HillClimbingResults.csv", "w") as file:
         file.write(",".join(["N", "Best distance", "Worst Distance", "Average Distance", "Optimal occurrences", "Optimal average", "Best UP distance", "Worst UP distance", "Average UP Distance", "Optimal UP ocurrences", "Optimal UP average\n"]))
         for res in results:
+            file.write(",".join([str(s) for s in res]) + "\n")
             file.write(",".join([str(e) for e in res]) + "\n")
 
 

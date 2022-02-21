@@ -63,7 +63,6 @@ def simAnnealing(datos,t0):
 def main():
     datos = [
 
-
     ]
 
     t0=10
