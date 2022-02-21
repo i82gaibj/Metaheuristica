@@ -1,6 +1,6 @@
-Nodos,Mejor Distancia,Peor Distancia,Distancia Media,Frecuencia mejor distancia,Mejor distancia (mejorada),Peor distancia (mejorada),Distancia Media (mejorada),Frecuencia mejor distancia (mejorada)
-5,2423,2423,2423.0,1000,1784,2423,2394.321,16
-6,1615,1615,1615.0,1000,1360,1615,1605.25,1
-7,2030,2183,2063.966,778,1663,2183,1977.083,29
-8,2263,2910,2405.659,584,1705,2811,2225.179,6
-9,2206,2857,2275.0,349,1625,2604,2151.977,19
+Nodos,Mejor Distancia,Peor Distancia,Distancia Media,Frec. mejor distancia,Mejor distancia (mejorada),Peor distancia (mejorada),Distancia Media (mejorada),Frec. mejor distancia (mejorada)
+5,1597,1597,1597.0,1000,735,1597,1584.439,7
+6,2159,2353,2216.618,703,1422,2353,2091.086,1
+7,1374,1640,1393.486,423,1001,1531,1293.735,21
+8,1912,2393,1965.162,746,1229,2393,1859.784,10
+9,1851,2511,2013.185,365,1226,2497,1810.981,2

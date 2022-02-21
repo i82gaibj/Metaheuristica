@@ -61,22 +61,19 @@ def simAnnealing(datos,t0):
     return solucion, longitud
 
 def main():
-    datos = [
 
-    ]
+    with open ("Datos.txt", "r") as f:
 
-    t0=10
+        gay = [[]]
+        for i in range(5, 10):
+            joder = f.readline()
+            for j in range(0,i):
+                f_contents = f.readline()
+                print(f_contents)
+                gay += f_contents
 
 
 
-    seconds = time.time()
-    s=simAnnealing(datos,t0)
-    seconds2 = time.time()
-    
-    print("--------------")
-    print("Solucion final: ",s[0])
-    print("Longitud de la ruta final: ",s[1])
-    print("Microsegundos de búsqueda: ", (seconds2 - seconds)*1000000)
 
 if __name__ == "__main__":
     main()

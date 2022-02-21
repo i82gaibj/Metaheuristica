@@ -130,9 +130,9 @@ def main():
                 cont -= 1
                 ciudad = key
                 if (cont != 0):
-                    filas = str(ciudad) + "," + "\n" + "\n"
+                    filas = str(ciudad) + "," + "\n"
                 else:
-                    filas = str(ciudad) + "\n" + "\n"
+                    filas = str(ciudad) + "\n"
                 file.write(filas)
 
         distances, aux_distances = [], []
@@ -165,7 +165,7 @@ def main():
 
     #Export data to .csv file
     with open("HillClimbingResults.csv", "w") as file:
-        file.write(",".join(["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frecuencia mejor distancia", "Mejor distancia (mejorada)", "Peor distancia (mejorada)", "Distancia Media (mejorada)", "Frecuencia mejor distancia (mejorada)\n"]))
+        file.write(",".join(["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frec. mejor distancia", "Mejor distancia (mejorada)", "Peor distancia (mejorada)", "Distancia Media (mejorada)", "Frec. mejor distancia (mejorada)\n"]))
         for res in results:
             file.write(",".join([str(s) for s in res]) + "\n")
 
