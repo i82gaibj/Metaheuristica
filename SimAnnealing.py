@@ -63,14 +63,19 @@ def simAnnealing(datos,t0):
 def main():
 
     with open ("Datos.txt", "r") as f:
-
-        gay = [[]]
         for i in range(5, 10):
             joder = f.readline()
+            gay = "["
             for j in range(0,i):
                 f_contents = f.readline()
-                print(f_contents)
-                gay += f_contents
+                gay = str(gay) + str(f_contents)
+
+                if(j == i-1):
+                    gay = str(gay) + "]"
+                print("vez ", j)
+                print (gay)
+
+
 
 
 

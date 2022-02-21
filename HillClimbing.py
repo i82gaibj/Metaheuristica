@@ -130,9 +130,9 @@ def main():
                 cont -= 1
                 ciudad = key
                 if (cont != 0):
-                    filas = str(ciudad) + "," + "\n"
+                    filas = "\n" + str(ciudad) + ","
                 else:
-                    filas = str(ciudad) + "\n"
+                    filas = "\n" + str(ciudad)
                 file.write(filas)
 
         distances, aux_distances = [], []
