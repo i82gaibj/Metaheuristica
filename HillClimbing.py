@@ -123,7 +123,7 @@ def main():
     for i in range(5, 10):
         datos = generador(i)
         with open("Datos.txt", "a") as file:
-            titulor = "longitud = " + str(i) + "\n"
+            titulor = "\n" + "longitud = " + str(i)
             file.write(titulor)
             cont = len(datos)
             for key in datos:
