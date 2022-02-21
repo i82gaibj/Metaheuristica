@@ -1,6 +1,6 @@
-N,Best distance,Worst Distance,Average Distance,Optimal occurrences,Optimal average,Best UP distance,Worst UP distance,Average UP Distance,Optimal UP ocurrences,Optimal UP average
-5,1431,1431,1431.0,1000,1.0,1009,1431,1423.826,17,0.017
-6,1228,1228,1228.0,1000,1.0,822,1228,1212.878,35,0.035
-7,1955,2090,2012.24,576,0.576,1278,2090,1864.819,18,0.018
-8,1849,2642,1933.716,822,0.822,1397,2535,1831.968,62,0.062
-9,2169,3174,2369.126,452,0.452,1365,3016,2202.344,47,0.047
+Nodos,Mejor Distancia,Peor Distancia,Distancia Media,Frecuencia mejor distancia,Mejor distancia (mejorada),Peor distancia (mejorada),Distancia Media (mejorada),Frecuencia mejor distancia (mejorada)
+5,2423,2423,2423.0,1000,1784,2423,2394.321,16
+6,1615,1615,1615.0,1000,1360,1615,1605.25,1
+7,2030,2183,2063.966,778,1663,2183,1977.083,29
+8,2263,2910,2405.659,584,1705,2811,2225.179,6
+9,2206,2857,2275.0,349,1625,2604,2151.977,19

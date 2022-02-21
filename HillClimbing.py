@@ -134,6 +134,7 @@ def main():
                 else:
                     filas = str(ciudad) + "\n" + "\n"
                 file.write(filas)
+
         distances, aux_distances = [], []
         best_dist, aux_best_dist = math.inf, math.inf
         worst_dist , aux_worst_dist ,aux_sum_dist, sum_dist = 0,0,0,0
@@ -160,11 +161,11 @@ def main():
             print("hola2")
         optimal_occurrences = distances.count(best_dist)
         aux_optimal_occurrences = aux_distances.count(aux_best_dist)
-        results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, optimal_occurrences / iterations, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences, aux_optimal_occurrences / iterations])
+        results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences])
 
     #Export data to .csv file
     with open("HillClimbingResults.csv", "w") as file:
-        file.write(",".join(["N", "Best distance", "Worst Distance", "Average Distance", "Optimal occurrences", "Optimal average", "Best UP distance", "Worst UP distance", "Average UP Distance", "Optimal UP ocurrences", "Optimal UP average\n"]))
+        file.write(",".join(["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frecuencia mejor distancia", "Mejor distancia (mejorada)", "Peor distancia (mejorada)", "Distancia Media (mejorada)", "Frecuencia mejor distancia (mejorada)\n"]))
         for res in results:
             file.write(",".join([str(s) for s in res]) + "\n")
 
