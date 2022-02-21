@@ -117,7 +117,7 @@ def hillClimbing(datos):
 def main():
 
     datos = []
-    iterations = 500
+    iterations = 1000
     results = []
 
     for i in range(5, 10):
@@ -134,33 +134,39 @@ def main():
                 else:
                     filas = str(ciudad) + "\n" + "\n"
                 file.write(filas)
-        distances = aux_distances = []
-        best_dist, aux_best_dist = math.inf, math.inf
-        worst_dist , aux_worst_dist ,aux_sum_dist, sum_dist = 0,0,0,0
-
+        distances = []
+        bestDist = math.inf
+        worstDist = 0
+        sumDist = 0
+        Auxdistances = []
+        AuxbestDist = math.inf
+        AuxworstDist = 0
+        AuxsumDist = 0
         for j in range(iterations):
-            #Calls the HillClimbing algorithm
+            # Calls the HillClimbing algorithm
             s = hillClimbing(datos)
             distances.append(s[1])
-            sum_dist += s[1]
-            if (s[1] < best_dist):
-                best_dist = s[1]
-            elif (s[1] > worst_dist):
-                worst_dist = s[1]
-            print("hola1")
-            #Calls the improved version using the same data
-            e = hillClimbingImproved(datos)
-            aux_distances.append(e[1])
-            aux_sum_dist += e[1]
-            if (e[1] < aux_best_dist):
-                aux_best_dist = e[1]
-            elif (e[1] > aux_worst_dist):
-                aux_worst_dist = e[1]
+            sumDist += s[1]
+            if (s[1] < bestDist):
+                bestDist = s[1]
+            elif (s[1] > worstDist):
+                worstDist = s[1]
 
-            print("hola2")
-        optimal_occurrences = distances.count(best_dist)
-        aux_optimal_occurrences = aux_distances.count(aux_best_dist)
-        results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, optimal_occurrences / iterations, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences, aux_optimal_occurrences / iterations])
+            # Calls the improved version using the same data
+            e = hillClimbingImproved(datos)
+            Auxdistances.append(e[1])
+            AuxsumDist += e[1]
+            if (e[1] < AuxbestDist):
+                AuxbestDist = e[1]
+            elif (e[1] > AuxworstDist):
+                AuxworstDist = e[1]
+
+        optimalOccurrences = distances.count(bestDist)
+        AuxoptimalOccurrences = Auxdistances.count(AuxbestDist)
+        results.append(
+            [i, bestDist, worstDist, sumDist / iterations, optimalOccurrences, optimalOccurrences / iterations,
+             AuxbestDist, AuxworstDist, AuxsumDist / iterations, AuxoptimalOccurrences,
+             AuxoptimalOccurrences / iterations])
 
     #Export data to .csv file
     with open("HillClimbingResults.csv", "w") as file:
