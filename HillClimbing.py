@@ -134,15 +134,9 @@ def main():
                 else:
                     filas = str(ciudad) + "\n" + "\n"
                 file.write(filas)
-
-        distances = []
-        best_dist = math.inf
-        worst_dist = 0
-        sum_dist = 0
-        aux_distances = []
-        aux_best_dist = math.inf
-        aux_worst_dist = 0
-        aux_sum_dist = 0
+        distances, aux_distances = [], []
+        best_dist, aux_best_dist = math.inf, math.inf
+        worst_dist , aux_worst_dist ,aux_sum_dist, sum_dist = 0,0,0,0
 
         for j in range(iterations):
             #Calls the HillClimbing algorithm
