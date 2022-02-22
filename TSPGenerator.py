@@ -14,11 +14,44 @@ def generador(nCiudades):
         tsp.append(distancias)
     return tsp
 
+def algoritmo(nodos):
+
+
+
+
+
+
+
+
+    tsp = generador(nodos)
+    return tsp
+
+
 def main():
-    tsp = generador(50)
-    for i in tsp:
-        print(i)
-        print(",")
+
+    with open("Datos.txt", "w") as f:
+        pass
+
+    nodos_min = input("¿Cuantas ciudades quieres generar como minimo?: ")
+    nodos_min = int(nodos_min)
+    nodos_max = input("¿Cuantas ciudades quieres generar como maximo?: ")
+    nodos_max = int(nodos_max)
+    incremento = input("¿Cuanto quieres que vaya incrementando?: ")
+    incremento = int(incremento)
+
+
+    for i in range(nodos_min, nodos_max, incremento):
+        datos = algoritmo(i)
+        with open("Datos.txt", "a") as file:
+            titulor =  "longitud = " + str(i) + "\n"
+            file.write(titulor)
+            for key in datos:
+                ciudad = key
+                filas =  str(ciudad) + "," + "\n"
+
+                file.write(filas)
+
+
 
 if __name__ == "__main__":
     main()
