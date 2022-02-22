@@ -135,10 +135,12 @@ def main():
     with open ("Datos.txt", "r") as f:
         for i in range(5, 10):
             linea = f.readline()
+            print(linea)
             aux_f = []
             for j in range(0,i):
                 f_contents = f.readline()
                 f_contents = f_contents[1:-3]
+                print(f_contents)
                 numbers = [int(n) for n in f_contents.split(", ")]
                 aux_f.append(numbers)
 
