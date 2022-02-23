@@ -40,8 +40,7 @@ def hillClimbingImproved(datos, n_perturbaciones):
     resul = hillClimbing(datos)
     solucion = resul[0]
     longitud_min = resul[1]
-    print("Solucion:", solucion)
-    print("longitud_min:", longitud_min)
+
     
     dist = len(solucion)
     print(dist)
@@ -61,8 +60,7 @@ def hillClimbingImproved(datos, n_perturbaciones):
         cont += 1     
 
     aux_longitud = evaluarSolucion(datos, nueva_solucion)
-    print("Solucion nueva: ", nueva_solucion)
-    print("Longitud nueva: ", aux_longitud)
+
     # We compare if the new solution is better than the one we already had
     if aux_longitud < longitud_min:
         longitud_min = aux_longitud
@@ -109,7 +107,7 @@ def main():
     
 
     with open ("Datos.txt", "r") as f:
-        for i in range(5, 20,5):
+        for i in range(5, 51,5):
             linea = f.readline()
             datos = []
             for j in range(0,i):
