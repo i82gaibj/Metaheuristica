@@ -42,23 +42,33 @@ def hillClimbingImproved(datos, n_perturbaciones):
     longitud_min = resul[1]
     print("Solucion:", solucion)
     print("longitud_min:", longitud_min)
-
+    
+    dist = len(solucion)
+    print(dist)
+    salto = (int)(dist/5)
     while cont < n_perturbaciones:     
         nueva_solucion = []
+        nueva_solucion = solucion
+        aux = nueva_solucion[cont]
+        if((cont+salto)<len(solucion)-1):
+            nueva_solucion[cont] = nueva_solucion[cont+salto]
+            nueva_solucion[cont+salto] = aux
+            
+        else:
+            nueva_solucion = nueva_solucion[0]
+            nueva_solucion[0] = aux
         
-        resul = hillClimbing(datos)
-        nueva_solucion = resul[0]
-        aux_longitud = resul[1]
+        cont += 1     
 
-        aux_longitud = evaluarSolucion(datos, nueva_solucion)
-        print("Solucion nueva: ", nueva_solucion)
-        print("Longitud nueva: ", aux_longitud)
-        # We compare if the new solution is better than the one we already had
-        if aux_longitud < longitud_min:
-            longitud_min = aux_longitud
-            solucion = nueva_solucion
+    aux_longitud = evaluarSolucion(datos, nueva_solucion)
+    print("Solucion nueva: ", nueva_solucion)
+    print("Longitud nueva: ", aux_longitud)
+    # We compare if the new solution is better than the one we already had
+    if aux_longitud < longitud_min:
+        longitud_min = aux_longitud
+        solucion = nueva_solucion
 
-        cont += 1
+    
 
     # Returns best solution found
 
@@ -93,15 +103,18 @@ def main():
 
     iterations = 1000
     results = []
-    aux_dataset = []
 
-    dataset = []
+    
+    n_perturbaciones = int(input("Numero de perturbaciones que desea: "))
+    
+
     with open ("Datos.txt", "r") as f:
-        for i in range(5, 10):
+        for i in range(5, 50,5):
             linea = f.readline()
             datos = []
             for j in range(0,i):
                 f_contents = f.readline()
+
                 f_contents = f_contents[1:-3]
                 numbers = [int(n) for n in f_contents.split(", ")]
                 datos.append(numbers)
@@ -127,7 +140,7 @@ def main():
 
                 #Calls the improved version using the same data
                 aux_start_time = time.time()
-                e = hillClimbingImproved(datos)
+                e = hillClimbingImproved(datos, n_perturbaciones)
                 aux_end_time = time.time()
                 aux_sum_time += (aux_end_time - aux_start_time)
                 aux_distances.append(e[1])
