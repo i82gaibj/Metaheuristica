@@ -60,6 +60,13 @@ def hillClimbingImproved(datos, n_perturbaciones):
         cont += 1     
 
     aux_longitud = evaluarSolucion(datos, nueva_solucion)
+    
+    vecino = obtenerMejorVecino(nueva_solucion, datos)
+    while vecino[1] < aux_longitud:
+        nueva_solucion = vecino[0]
+        aux_longitud = vecino[1]
+
+        vecino = obtenerMejorVecino(nueva_solucion, datos)
 
     # We compare if the new solution is better than the one we already had
     if aux_longitud < longitud_min:
@@ -99,7 +106,7 @@ def hillClimbing(datos):
 def main():
 
 
-    iterations = 1000
+    iterations = 10
     results = []
 
     
