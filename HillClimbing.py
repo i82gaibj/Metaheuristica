@@ -1,7 +1,7 @@
 import random
 import math
 import time
-from TSPGenerator import generador
+
 
 #evaluamos la solucion
 def evaluarSolucion(datos, solucion):
@@ -32,63 +32,37 @@ def obtenerMejorVecino(solucion, datos):
     return mejorVecino, mejorLongitud
 
 
-def hillClimbingImproved(datos):
-    l = len(datos)
+def hillClimbingImproved(datos, n_perturbaciones):
+    cont = 0
     longitud_min = float('inf')
-    ciudades = list(range(l))
     solucion = []
-    for i in range(l):
-        x = random.randint(0, len(ciudades) - 1)
-        ciudad = ciudades[x]
-        solucion.append(ciudad)
-        ciudades.remove(ciudad)
-    longitud = evaluarSolucion(datos, solucion)
+    
+    resul = hillClimbing(datos)
+    solucion = resul[0]
+    longitud_min = resul[1]
+    print("Solucion:", solucion)
+    print("longitud_min:", longitud_min)
 
-    vecino = obtenerMejorVecino(solucion, datos)
-    cont = 1
-    while vecino[1] < longitud:
-        solucion = vecino[0]
-        longitud = vecino[1]
-        vecino = obtenerMejorVecino(solucion, datos)
-        cont = cont + 1
-    # So far the Hill Climbing algorithm remains
-
-    # Now the improvement begins
-    while cont + 2 < (len(datos) - 1):
-        # We obtain a permutation of the solution
-        aux_cont = cont
-        aux_cont_2 = 0
+    while cont < n_perturbaciones:     
         nueva_solucion = []
-
-        for y in range(l):
-            if aux_cont < (len(datos) - 1):
-                nueva_solucion.append(solucion[aux_cont])
-                aux_cont += 1
-            else:
-                nueva_solucion.append(solucion[aux_cont_2])
-                aux_cont_2 += 1
+        
+        resul = hillClimbing(datos)
+        nueva_solucion = resul[0]
+        aux_longitud = resul[1]
 
         aux_longitud = evaluarSolucion(datos, nueva_solucion)
-
+        print("Solucion nueva: ", nueva_solucion)
+        print("Longitud nueva: ", aux_longitud)
         # We compare if the new solution is better than the one we already had
         if aux_longitud < longitud_min:
-            cont = cont + 2
-            aux_vecino = obtenerMejorVecino(nueva_solucion, datos)
-
-            while aux_vecino[1] < aux_longitud:
-                nueva_solucion = aux_vecino[0]
-                aux_longitud = aux_vecino[1]
-                aux_vecino = obtenerMejorVecino(nueva_solucion, datos)
-                cont += 1
             longitud_min = aux_longitud
+            solucion = nueva_solucion
 
         cont += 1
 
     # Returns best solution found
-    if longitud_min < longitud:
-        return nueva_solucion, aux_longitud
-    else:
-        return solucion, longitud
+
+    return solucion, longitud_min
 
 
 
@@ -116,56 +90,59 @@ def hillClimbing(datos):
 
 
 def main():
-    with open("Datos.txt", "w") as f:
-        pass
+
     datos = []
-    iterations = 1000
+    iterations = 10
     results = []
+    
+    n_perturbaciones = int(input("Numero de perturbaciones que desea"))
+    
 
-    for i in range(5, 55, 5):
-        datos = generador(i)
-        with open("Datos.txt", "a") as file:
-            titulor =  "longitud = " + str(i) + "\n"
-            file.write(titulor)
-            for key in datos:
-                ciudad = key
-                filas =  str(ciudad) + "," + "\n"
-
-                file.write(filas)
-        distances, aux_distances = [], []
-        best_dist, aux_best_dist = math.inf, math.inf
-        worst_dist, aux_worst_dist, aux_sum_dist, sum_dist, sum_time, aux_sum_time = 0,0,0,0,0,0
-
-
-        for j in range(iterations):
-            #Calls the HillClimbing algorithm
-            start_time = time.time()
-            s = hillClimbing(datos)
-            end_time = time.time()
-            sum_time += (end_time - start_time)
-            distances.append(s[1])
-            sum_dist += s[1]
-            if (s[1] < best_dist):
-                best_dist = s[1]
-            elif (s[1] > worst_dist):
-                worst_dist = s[1]
-
-            #Calls the improved version using the same data
-            aux_start_time = time.time()
-            e = hillClimbingImproved(datos)
-            aux_end_time = time.time()
-            aux_sum_time += (aux_end_time - aux_start_time)
-            aux_distances.append(e[1])
-            aux_sum_dist += e[1]
-            if (e[1] < aux_best_dist):
-                aux_best_dist = e[1]
-            elif (e[1] > aux_worst_dist):
-                aux_worst_dist = e[1]
+    with open ("Datos.txt", "r") as f:
+        for i in range(5, 55,5):
+            f_contents = f.readline()
+            datos = []
+            for j in range(0,i):
+                f_contents = f.readline()
+                f_contents = f_contents[1:-3]
+                numbers = [int(n) for n in f_contents.split(", ")]
+                datos.append(numbers)
 
 
-        optimal_occurrences = distances.count(best_dist)
-        aux_optimal_occurrences = aux_distances.count(aux_best_dist)
-        results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences, sum_time*1000, aux_sum_time * 1000])
+            distances, aux_distances = [], []
+            best_dist, aux_best_dist = math.inf, math.inf
+            worst_dist, aux_worst_dist, aux_sum_dist, sum_dist, sum_time, aux_sum_time = 0,0,0,0,0,0
+
+
+            for j in range(iterations):
+                #Calls the HillClimbing algorithm
+                start_time = time.time()
+                s = hillClimbing(datos)
+                end_time = time.time()
+                sum_time += (end_time - start_time)
+                distances.append(s[1])
+                sum_dist += s[1]
+                if (s[1] < best_dist):
+                    best_dist = s[1]
+                elif (s[1] > worst_dist):
+                    worst_dist = s[1]
+                        
+                    #Calls the improved version using the same data
+                aux_start_time = time.time()
+                e = hillClimbingImproved(datos, n_perturbaciones)
+                aux_end_time = time.time()
+                aux_sum_time += (aux_end_time - aux_start_time)
+                aux_distances.append(e[1])
+                aux_sum_dist += e[1]
+                if (e[1] < aux_best_dist):
+                    aux_best_dist = e[1]
+                elif (e[1] > aux_worst_dist):
+                    aux_worst_dist = e[1]
+                                
+
+            optimal_occurrences = distances.count(best_dist)
+            aux_optimal_occurrences = aux_distances.count(aux_best_dist)
+            results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences, sum_time*1000, aux_sum_time * 1000])
 
     #Export data to .csv file
     with open("HillClimbingResults.csv", "w") as file:
