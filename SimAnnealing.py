@@ -171,13 +171,12 @@ def main():
                 worstDist = s[1]
 
         optimalOccurrences = distances.count(bestDist)
-        results.append([len(datos), bestDist, worstDist, sumDist / iterations, optimalOccurrences,
-                        optimalOccurrences / iterations, sum_time / iterations])
+        results.append([len(datos), bestDist, worstDist, sumDist / iterations, optimalOccurrences, sum_time / iterations])
 
     # Export data to csv file
     with open("results.csv", "w") as file:
         file.write(",".join(
-            ["N", "Best distance", "W<orst Distance", "Average Distance", "Optimal occurrences", "Optimal average\n"]))
+            ["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frec. mejor frecuencia", "Tiempo Medio\n"]))
         for res in results:
             file.write(",".join([str(e) for e in res]) + "\n")
 
