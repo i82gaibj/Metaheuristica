@@ -32,64 +32,37 @@ def obtenerMejorVecino(solucion, datos):
     return mejorVecino, mejorLongitud
 
 
-def hillClimbingImproved(datos):
-    l = len(datos)
+def hillClimbingImproved(datos, n_perturbaciones):
+    cont = 0
     longitud_min = float('inf')
-    ciudades = list(range(l))
     solucion = []
-    for i in range(l):
-        x = random.randint(0, len(ciudades) - 1)
-        ciudad = ciudades[x]
-        solucion.append(ciudad)
-        ciudades.remove(ciudad)
-    longitud = evaluarSolucion(datos, solucion)
+    
+    resul = hillClimbing(datos)
+    solucion = resul[0]
+    longitud_min = resul[1]
+    print("Solucion:", solucion)
+    print("longitud_min:", longitud_min)
 
-    vecino = obtenerMejorVecino(solucion, datos)
-    cont = 1
-    while vecino[1] < longitud:
-        solucion = vecino[0]
-        longitud = vecino[1]
-        vecino = obtenerMejorVecino(solucion, datos)
-        cont = cont + 1
-    # So far the Hill Climbing algorithm remains
-
-    # Now the improvement begins
-    while cont + 2 < (len(datos) - 1):
-        # We obtain a permutation of the solution
-        aux_cont = cont
-        aux_cont_2 = 0
+    while cont < n_perturbaciones:     
         nueva_solucion = []
-
-        for y in range(l):
-            if aux_cont < (len(datos) - 1):
-                nueva_solucion.append(solucion[aux_cont])
-                aux_cont += 1
-            else:
-                nueva_solucion.append(solucion[aux_cont_2])
-                aux_cont_2 += 1
+        
+        resul = hillClimbing(datos)
+        nueva_solucion = resul[0]
+        aux_longitud = resul[1]
 
         aux_longitud = evaluarSolucion(datos, nueva_solucion)
-
+        print("Solucion nueva: ", nueva_solucion)
+        print("Longitud nueva: ", aux_longitud)
         # We compare if the new solution is better than the one we already had
         if aux_longitud < longitud_min:
-            cont = cont + 2
-            aux_vecino = obtenerMejorVecino(nueva_solucion, datos)
-
-            while aux_vecino[1] < aux_longitud:
-                nueva_solucion = aux_vecino[0]
-                aux_longitud = aux_vecino[1]
-                aux_vecino = obtenerMejorVecino(nueva_solucion, datos)
-                cont += 1
             longitud_min = aux_longitud
+            solucion = nueva_solucion
 
         cont += 1
 
     # Returns best solution found
-    if longitud_min < longitud:
-        return nueva_solucion, aux_longitud
-    else:
-        return solucion, longitud
 
+    return solucion, longitud_min
 
 
 #algoritmo Hill Climbing simple sin mejoras
