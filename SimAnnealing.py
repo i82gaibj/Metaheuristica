@@ -133,7 +133,7 @@ def main():
     aux_dataset = []
     dataset = []
     with open ("Datos.txt", "r") as f:
-        for i in range(5, 10):
+        for i in range(5, 51,5):
             linea = f.readline()
             print(linea)
             aux_f = []
@@ -161,7 +161,7 @@ def main():
         worstDist = 0
         sumDist = 0
         for j in range(iterations):
-            s = simAnnealing(datos, t0, maxUnImprovement)
+            s = simAnnealing2(datos, t0)
             distances.append(s[1])
             sumDist += s[1]
             if (s[1] < bestDist):
