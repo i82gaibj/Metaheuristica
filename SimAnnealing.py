@@ -134,16 +134,18 @@ def main():
     dataset = []
     with open ("Datos.txt", "r") as f:
         for i in range(5, 10):
-            joder = f.readline()
-            gay = []
+            linea = f.readline()
+            print(linea)
+            aux_f = []
             for j in range(0,i):
                 f_contents = f.readline()
                 f_contents = f_contents[1:-3]
+                print(f_contents)
                 numbers = [int(n) for n in f_contents.split(", ")]
-                gay.append(numbers)
+                aux_f.append(numbers)
 
                 if(j == i-1):
-                    dataset.append(gay)
+                    dataset.append(aux_f)
 
     print(dataset)
     maxUnImprovement = 400
