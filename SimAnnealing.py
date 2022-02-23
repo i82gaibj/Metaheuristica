@@ -106,8 +106,7 @@ def simAnnealing2(datos,t0):
         solucion.append(ciudad)
         ciudades.remove(ciudad)
     longitud = evaluarSolucion(datos, solucion)
-    print("Longitud de la ruta: ", longitud)
-    print("Temperatura: ", t)
+
 
     it=0
     while t > 0.05:
@@ -124,8 +123,7 @@ def simAnnealing2(datos,t0):
 
         it+=1
         t=0.99*t
-        print("Longitud de la ruta: ", longitud)
-        print("Temperatura: ", t)
+
     return solucion, longitud
 
 def main():
@@ -149,7 +147,7 @@ def main():
 
     print(dataset)
     maxUnImprovement = 400
-    t0 = 5
+    t0 = 10
 
     iterations = 1000
     results = []
@@ -159,9 +157,12 @@ def main():
 
         bestDist = math.inf
         worstDist = 0
-        sumDist = 0
+        sumDist, sum_time = 0,0
         for j in range(iterations):
+            start_time = time.time()
             s = simAnnealing2(datos, t0)
+            end_time = time.time()
+            sum_time += (end_time - start_time)
             distances.append(s[1])
             sumDist += s[1]
             if (s[1] < bestDist):
@@ -171,7 +172,7 @@ def main():
 
         optimalOccurrences = distances.count(bestDist)
         results.append([len(datos), bestDist, worstDist, sumDist / iterations, optimalOccurrences,
-                        optimalOccurrences / iterations])
+                        optimalOccurrences / iterations, sum_time / iterations])
 
     # Export data to csv file
     with open("results.csv", "w") as file:
