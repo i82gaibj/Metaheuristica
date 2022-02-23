@@ -55,7 +55,7 @@ def hillClimbingImproved(datos, n_perturbaciones):
             nueva_solucion[cont+salto] = aux
             
         else:
-            nueva_solucion = nueva_solucion[0]
+            nueva_solucion[cont] = nueva_solucion[0]
             nueva_solucion[0] = aux
         
         cont += 1     
@@ -109,7 +109,7 @@ def main():
     
 
     with open ("Datos.txt", "r") as f:
-        for i in range(5, 50,5):
+        for i in range(5, 20,5):
             linea = f.readline()
             datos = []
             for j in range(0,i):
