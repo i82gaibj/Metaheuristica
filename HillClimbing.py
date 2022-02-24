@@ -106,7 +106,7 @@ def hillClimbing(datos):
 def main():
 
 
-    iterations = 10
+    iterations = 1000
     results = []
 
     
@@ -161,7 +161,7 @@ def main():
             results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences, sum_time*1000, aux_sum_time * 1000])
 
     #Export data to .csv file
-    with open("HillClimbingResults4.csv", "w") as file:
+    with open("HillClimbingResults3.csv", "w") as file:
         file.write(",".join(["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frec. mejor distancia", "Mejor distancia (mejorada)", "Peor distancia (mejorada)", "Distancia Media (mejorada)", "Frec. mejor distancia (mejorada)", "Tiempo medio", "Tiempo medio (mejorado)\n"]))
         for res in results:
             file.write(",".join([str(s) for s in res]) + "\n")
