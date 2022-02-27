@@ -27,7 +27,7 @@ def obtenerVecino(solucion, datos):
 
     return vecino, longitud
 
-def simAnnealing(datos,t0,maxUnImprovement):
+def simAnnealing(datos,t0,limit_un_improvement):
     t=t0
     l=len(datos)
     ##Creamos una solucion aleatoria
@@ -38,15 +38,14 @@ def simAnnealing(datos,t0,maxUnImprovement):
         solucion.append(ciudad)
         ciudades.remove(ciudad)
     longitud = evaluarSolucion(datos, solucion)
-    #print("Longitud de la ruta: ", longitud)
-    #print("Temperatura: ", t)
 
     it=0
-    unimprovement = 0
+    un_improvement = 0
 
-    bestSol = solucion
-    bestLen = longitud
-    while t > 0.05 and it < 5000:
+    best_solution = solucion
+    best_longitud = longitud
+    while t > 0.05 and it < 5000: #ponemos iteraciones para no caer en un bucle infinito al recalentar
+
         ##Obtenemos un vecino al azar
         vecino = obtenerVecino(solucion, datos)
         incremento = vecino[1]-longitud
@@ -54,46 +53,32 @@ def simAnnealing(datos,t0,maxUnImprovement):
         if incremento < 0:
             longitud = vecino[1]
             solucion = vecino[0]
-            unimprovement = 0
+            un_improvement = 0
 
-            if longitud < bestLen:
-                bestSol = solucion
-                bestLen = longitud
+            if longitud < best_longitud:
+                best_solution = solucion
+                best_longitud = longitud
 
         elif random.random() < math.exp(-abs(incremento) / t):
             longitud = vecino[1]
             solucion = vecino[0]
-            unimprovement = 0
+            un_improvement = 0
 
-            if longitud < bestLen:
-                bestSol = solucion
-                bestLen = longitud
+            if longitud < best_longitud: #añadimos comprobación para ver cual solucion aceptar
+                best_solution = solucion
+                best_longitud = longitud
         else:
-            unimprovement += 1
+            un_improvement += 1
 
         it+=1
         t=0.99*t
 
-        #Different annealing functions (not compatible with reheating unless we reset it)
-        #t = logAnnealing(t0, alpha, it)
-        #t = geometricAnnealing(t0, alpha, it)
-        #t = linearAnnealing(t0, alpha, it)
-
-
-        #Reheating
-        #https://academicjournals.org/journal/IJPS/article-full-text-pdf/D6CF1F025890
-        if unimprovement >= maxUnImprovement:
-            unimprovement = 0
+        #comprobacion del umbral y recalentamiento
+        if un_improvement >= limit_un_improvement:
+            un_improvement = 0
             t = t0
 
-        # My own approach to reheating, didn't work well
-        #if t/t0 < 0.1 and random.random() < 0.01:
-        #    print("reheat " + str(t) + " " + str(2*t))
-        #    t *= 5
-
-        #print("Longitud de la ruta: ", longitud)
-        #print("Temperatura: ", t)
-    return bestSol, bestLen
+    return best_solution, best_longitud
 
 def simAnnealing2(datos,t0):
     t=t0
@@ -109,7 +94,7 @@ def simAnnealing2(datos,t0):
 
 
     it=0
-    while t > 0.05:
+    while t > 0.05 and it < 10000:
         ##Obtenemos un vecino al azar
         vecino = obtenerVecino(solucion, datos)
         incremento = vecino[1]-longitud
@@ -121,10 +106,34 @@ def simAnnealing2(datos,t0):
             longitud = vecino[1]
             solucion = vecino[0]
 
+
         it+=1
-        t=0.99*t
+
+
+        #t = logAnnealing(t0, 0.04, it)
+        #t = geometricAnnealing(t0, 0.65, it)
+        #t = linearAnnealing(t0, 0.01, it)
+        #t = cauchyAnneling(t0,0.65 ,it)
+
 
     return solucion, longitud
+
+#Las 4 funciones de enfriamiento usadas
+
+def logaritmic_Annealing(t0, alpha, k):
+    return alpha * t0 / math.log(1+k)
+
+def geometric_Annealing(t0, alpha, k):
+    return alpha**k * t0
+
+def linear_Annealing(t0, alpha, k):
+    return t0 - alpha * k
+
+def cauchy_Anneling(t0, alpha, k):
+    return alpha * t0 / k
+
+
+
 
 def main():
 
@@ -146,7 +155,8 @@ def main():
                     dataset.append(aux_f)
 
     print(dataset)
-    maxUnImprovement = 400
+    #Establecemos el limite del umbral de temperatura para recalentar
+    limit_un_improvement = 800
     t0 = 10
 
     iterations = 1000
@@ -155,26 +165,26 @@ def main():
         print("N: " + str(len(datos)))
         distances = []
 
-        bestDist = math.inf
-        worstDist = 0
-        sumDist, sum_time = 0,0
+        best_distance = math.inf
+        worst_distance = 0
+        sum_distance, sum_time = 0,0
         for j in range(iterations):
             start_time = time.time()
-            s = simAnnealing2(datos, t0)
+            s = simAnnealing(datos, t0, limit_un_improvement)
             end_time = time.time()
             sum_time += (end_time - start_time)
             distances.append(s[1])
-            sumDist += s[1]
-            if (s[1] < bestDist):
-                bestDist = s[1]
-            elif (s[1] > worstDist):
-                worstDist = s[1]
+            sum_distance += s[1]
+            if (s[1] < best_distance):
+                best_distance = s[1]
+            elif (s[1] > worst_distance):
+                worst_distance = s[1]
 
-        optimalOccurrences = distances.count(bestDist)
-        results.append([len(datos), bestDist, worstDist, sumDist / iterations, optimalOccurrences, sum_time / iterations])
+        optimal_occurrences = distances.count(best_distance)
+        results.append([len(datos), best_distance, worst_distance, sum_distance / iterations, optimal_occurrences, sum_time * 1000])
 
     # Export data to csv file
-    with open("results.csv", "w") as file:
+    with open("sim_anneling_improved_800.csv", "w") as file:
         file.write(",".join(
             ["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frec. mejor frecuencia", "Tiempo Medio\n"]))
         for res in results:
