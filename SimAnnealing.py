@@ -55,7 +55,7 @@ def simAnnealing(datos,t0,limit_un_improvement):
             solucion = vecino[0]
             un_improvement = 0
 
-            if longitud < best_longitud:
+            if longitud < best_longitud:#añadimos comprobacion para ver cual solucion aceptar
                 best_solution = solucion
                 best_longitud = longitud
 
@@ -156,7 +156,7 @@ def main():
 
     print(dataset)
     #Establecemos el limite del umbral de temperatura para recalentar
-    limit_un_improvement = 800
+    limit_un_improvement = 600
     t0 = 10
 
     iterations = 1000
@@ -184,7 +184,7 @@ def main():
         results.append([len(datos), best_distance, worst_distance, sum_distance / iterations, optimal_occurrences, sum_time * 1000])
 
     # Export data to csv file
-    with open("sim_anneling_improved_800.csv", "w") as file:
+    with open("sim_anneling_improved_600.csv", "w") as file:
         file.write(",".join(
             ["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frec. mejor frecuencia", "Tiempo Medio\n"]))
         for res in results:
