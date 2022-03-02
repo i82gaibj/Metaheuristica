@@ -68,14 +68,14 @@ def hillClimbingImproved(datos, n_perturbaciones):
 
         vecino = obtenerMejorVecino(nueva_solucion, datos)
 
-    # We compare if the new solution is better than the one we already had
+
     if aux_longitud < longitud_min:
         longitud_min = aux_longitud
         solucion = nueva_solucion
 
     
 
-    # Returns best solution found
+
 
     return solucion, longitud_min
 
@@ -160,7 +160,7 @@ def main():
             aux_optimal_occurrences = aux_distances.count(aux_best_dist)
             results.append([i, best_dist, worst_dist, sum_dist / iterations, optimal_occurrences, aux_best_dist, aux_worst_dist, aux_sum_dist / iterations, aux_optimal_occurrences, sum_time*1000, aux_sum_time * 1000])
 
-    #Export data to .csv file
+    #Funcion para exportar los resultados a un fichero
     with open("HillClimbingResults4.csv", "w") as file:
         file.write(",".join(["Nodos", "Mejor Distancia", "Peor Distancia", "Distancia Media", "Frec. mejor distancia", "Mejor distancia (mejorada)", "Peor distancia (mejorada)", "Distancia Media (mejorada)", "Frec. mejor distancia (mejorada)", "Tiempo medio", "Tiempo medio (mejorado)\n"]))
         for res in results:
